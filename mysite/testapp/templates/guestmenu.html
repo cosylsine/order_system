@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<style>
+  /* 页面居中 */
+  html, body {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  body {
+    background-color: #f5f5f5;
+    margin: 0
+  }
+
+  /* 菜单容器 */
+  .menu-container {
+    max-width: 800px;
+    padding: 30px;
+    height: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+  }
+
+  /* 菜单标题样式 */
+  h1 {
+    text-align: center;
+    margin-top: 0;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* 菜单列表样式 */
+  .menu-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  .menu-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .menu-list li span {
+    flex: 1;
+    margin-right: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .menu-list li .dish-price {
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* 列名样式 */
+  .column-names {
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+  }
+
+  /* 下订单表单样式 */
+  form {
+    margin-top: 20px;
+  }
+
+  form label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  form select,
+  form input[type="number"] {
+    width: 300px;
+    padding: 5px;
+    margin-bottom: 10px;
+  }
+
+  form input[type="submit"] {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+  }
+
+  form input[type="submit"]:hover {
+    background-color: #666;
+  }
+
+  p {
+    text-align: center;
+  }
+</style>
+<head>
+  <title>菜单</title>
+</head>
+<body>
+  <div class="menu-container">
+    <h1>菜单</h1>
+
+    <ul class="menu-list">
+      <li class="column-names">
+        <span>食堂名</span>
+        <span>商家名</span>
+        <span>商家描述</span>
+        <span>菜品名</span>
+        <span class="dish-price">菜品单价</span>
+        <span>菜品描述</span>
+      </li>
+      {% for menu_item in menu_items %}
+        <li>
+          <span class="canteen-name">{{ menu_item.canteen_name }}</span>
+          <span>{{ menu_item.seller_name }}</span>
+          <span>{{ menu_item.seller_description }}</span>
+          <span>{{ menu_item.dish_name }}</span>
+          <span class="dish-price">￥{{ menu_item.dish_price }}</span>
+          <span>{{ menu_item.dish_description }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <h2>下订单</h2>
+    <form action="/testapp/place_order/" method="post">
+      {% csrf_token %}
+      <label for="dish">选择菜品:</label>
+      <select name="dish" id="dish">
+        {% for menu_item in menu_items %}
+          <option value="{{ menu_item.dish_name }}">{{ menu_item.dish_name }}</option>
+        {% endfor %}
+      </select>
+      <br>
+      <label for="quantity">数量:</label>
+      <input type="number" name="quantity" id="quantity" min="1" required>
+      <br>
+
+        <label for="area">区域:</label>
+        <input type="text" name="area" id="area" required>
+      <br>
+
+        <label for="building">楼栋:</label>
+        <input type="text" name="building" id="building" required>
+      <br>
+
+        <label for="room">房间:</label>
+        <input type="text" name="room" id="room" required>
+      <br>
+
+
+        <label for="tel">电话:</label>
+        <input type="text" name="tel" id="tel" required>
+      <br>
+      <br>
+      <input type="submit" value="下订单">
+    </form>
+    <p>不想逛了？<a href="/testapp/">返回首页</a></p>
+    <br>
+  </div>
+</body>
+</html>

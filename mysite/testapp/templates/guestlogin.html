@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>顾客登录</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-form {
+      width: 300px;
+      padding: 20px;
+      background: #f1f1f1;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-form input[type="text"],
+    .login-form input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+
+    .login-form input[type="submit"] {
+      width: 100%;
+      padding: 10px;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+    }
+
+    .login-form input[type="submit"]:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-form">
+    <h2>顾客登录</h2>
+<!--  去到判断顾客登录是否合法的后端逻辑  -->
+    <form action="/testapp/guestlogin/" method="post">
+      {% csrf_token %}
+      <input type="text" name="guest_id" placeholder="账号（以b开头）" pattern="^b.*" title="账号应以字母 b 开头" required><br>
+      <input type="password" name="password" placeholder="密码" required><br>
+      <input type="submit" value="登录">
+    </form>
+  </div>
+</body>
+</html>

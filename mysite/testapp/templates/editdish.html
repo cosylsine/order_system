@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>编辑菜品</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    button[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>编辑菜品</h1>
+
+    <form method="POST" action="{% url 'testapp:dishedit' dish.dish_id|stringformat:'s' %}">
+      {% csrf_token %}
+      <label for="dish_name">菜品名：</label>
+      <input type="text" id="dish_name" name="dish_name" value=""><br><br>
+      <label for="dish_price">菜品价格：</label>
+      <input type="text" id="dish_price" name="dish_price" value=""><br><br>
+      <label for="dish_description">菜品描述：</label>
+      <input type="text" id="dish_description" name="dish_description" value=""><br><br>
+      <button type="submit">保存</button>
+    </form>
+  </div>
+</body>
+</html>

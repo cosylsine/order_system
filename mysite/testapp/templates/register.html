@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>注册页面</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f2f2f2;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"],
+    input[type="addr_id"],
+    input[type="tel"],
+    input[type="password"] {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>用户注册</h2>
+    <form action="/testapp/register/" method="post">
+      {% csrf_token %}
+      <label for="userID">账号(买家账号以b开头,卖家账号以s开头,管理员账号以m开头):</label>
+      <input type="text" id="userID" name="userID" pattern="[bsm].*" required><br><br>
+      <label for="username">昵称:</label>
+      <input type="text" id="username" name="username" required><br><br>
+
+      <label for="addr_id">地址号:(0表示默认地址)</label>
+      <input type="text" id="addr_id" name="addr_id" required><br><br>
+
+      <label for="tel">电话:</label>
+      <input type="tel" id="tel" name="tel" required><br><br>
+
+      <label for="password">密码:</label>
+      <input type="password" id="password" name="password" required><br><br>
+
+      <input type="submit" value="注册">
+    </form>
+    <p>已有账号？<a href="/testapp/">直接登录</a></p>
+  </div>
+</body>
+</html>

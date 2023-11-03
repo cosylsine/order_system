@@ -1,0 +1,174 @@
+<!-- sellermenu.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>食堂管理</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    li span {
+      display: inline-block;
+      width: 25%;
+    }
+
+    li a {
+      margin-left: 10px;
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    li a:hover {
+      text-decoration: underline;
+    }
+
+    .canteen-info {
+      display: inline-block;
+      margin-right: 10px;
+      width: 25%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    td:not(:last-child) {
+      padding-right: 20px;
+    }
+
+    .canteen-table {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .canteen-table-row {
+      display: table-row;
+    }
+
+    .canteen-table-cell {
+      display: table-cell;
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .column-header {
+      font-weight: bold;
+    }
+  </style>
+  <script>
+    function confirmDelete(canteenId) {
+      var result = confirm("确定删除食堂吗？");
+      if (result) {
+        // 用户点击了确认按钮，执行删除逻辑
+        var deleteUrl = "/testapp/canteendelete/" + canteenId + "/";
+        window.location.href = deleteUrl;
+      } else {
+        // 用户点击了取消按钮，回到原界面
+        // 这里可以根据需要进行相应的处理，例如刷新页面或返回上一页
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <h1>食堂管理</h1>
+
+    <h2>食堂列表</h2>
+    <table class="canteen-table">
+      <tr class="canteen-table-row">
+        <th class="canteen-table-cell column-header">食堂ID</th>
+        <th class="canteen-table-cell column-header">食堂名称</th>
+        <th class="canteen-table-cell column-header">操作</th>
+      </tr>
+      {% for manager in managers %}
+      <tr class="canteen-table-row">
+        <td class="canteen-table-cell">{{ manager.canteen_id }}</td>
+        <td class="canteen-table-cell"></td>
+        <td class="canteen-table-cell">
+          <a href="{% url 'testapp:tocanteenedit' manager.can_canteen_id|stringformat:'s' %}">编辑</a>
+          <a href="#" onclick="confirmDelete('{{ manager.canteen_id }}')">删除</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    {% if managers.0.can_canteen_id is None %}
+    <h2>添加食堂</h2>
+    <form action="/testapp/canteenadd/" method="post">
+      {% csrf_token %}
+      <label for="canteen_name">食堂名称:</label>
+      <input type="text" id="canteen_name" name="canteen_name" required><br>
+      <button type="submit">添加</button>
+    </form>
+    {% endif %}
+    <p>下班?<a href="/testapp/">返回首页</a></p>
+  </div>
+</body>
+</html>

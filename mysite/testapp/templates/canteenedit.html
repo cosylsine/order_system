@@ -1,0 +1,68 @@
+<!-- canteenedit.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>修改食堂信息</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      max-width: 400px;
+      padding: 20px;
+      background-color: #ffffff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333333;
+      text-align: center;
+    }
+
+    form {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #cccccc;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>修改食堂信息</h2>
+    <form method="post", action="{% url 'testapp:canteenedit' canteen.canteen_id|stringformat:'s' %}">
+      {% csrf_token %}
+      <label for="canteen_name">食堂名称：</label>
+      <input type="text" id="canteen_name" name="canteen_name" value="{{ canteen.canteen_name }}"><br><br>
+      <button type="submit">保存</button>
+    </form>
+  </div>
+</body>
+</html>

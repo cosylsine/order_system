@@ -1,0 +1,215 @@
+<!-- sellermenu.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>菜品管理</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    li {
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    li:last-child {
+      border-bottom: none;
+    }
+
+    li span {
+      display: inline-block;
+      width: 25%;
+    }
+
+    li a {
+      margin-left: 10px;
+      color: #4CAF50;
+      text-decoration: none;
+    }
+
+    li a:hover {
+      text-decoration: underline;
+    }
+
+    .dish-info {
+      display: inline-block;
+      margin-right: 10px; /* 调整间距大小 */
+      width: 25%;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+
+    /* 调整列与列之间的间距 */
+    td:not(:last-child) {
+      padding-right: 20px;
+    }
+
+    .dish-table {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .dish-table-row {
+      display: table-row;
+    }
+
+    .dish-table-cell {
+      display: table-cell;
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+
+    .column-header {
+      font-weight: bold;
+    }
+  </style>
+  <script>
+    function confirmDelete(dishId) {
+        var result = confirm("确定删除菜品吗？");
+        if (result) {
+            // 用户点击了确认按钮，执行删除逻辑
+            var deleteUrl = "/testapp/dishdelete/" + dishId + "/";
+            window.location.href = deleteUrl;
+        } else {
+            // 用户点击了取消按钮，回到原界面
+            // 这里可以根据需要进行相应的处理，例如刷新页面或返回上一页
+        }
+    }
+    </script>
+</head>
+<body>
+  <div class="container">
+    <h1>菜品管理</h1>
+
+
+    {% for order_detail in order_details %}
+      <h3>订单号: {{ order_detail.order_id }}</h3>
+      <!-- 显示订单的其他信息 -->
+      <table>
+        <tr>
+          <th>顾客昵称</th>
+          <th>下单时间</th>
+          <th>菜品名</th>
+          <th>菜品数量</th>
+          <th>订单金额</th>
+          <th>订单状态</th>
+        </tr>
+        <tr>
+          <td>{{ order_detail.guest_name }}</td>
+          <td>{{ order_detail.order_time }}</td>
+          <td>{{ order_detail.dish_name }}</td>
+          <td>{{ order_detail.order_dish_num }}</td>
+          <td>{{ order_detail.order_amount }}</td>
+          <td>{{ order_detail.order_status }}</td>
+      </table>
+      <form action="/testapp/updateorderstatus/{{ order_detail.order_id }}/" method="POST">
+        {% csrf_token %}
+        <label for="new_status">新的订单状态:</label>
+        <input type="text" id="new_status" name="new_status">
+        <button type="submit">提交</button>
+      </form>
+    {% endfor %}
+
+
+    <h2>菜品列表</h2>
+    <table class="dish-table">
+      <tr class="dish-table-row">
+        <th class="dish-table-cell column-header">菜品ID</th>
+        <th class="dish-table-cell column-header">菜品名称</th>
+        <th class="dish-table-cell column-header">菜品价格</th>
+        <th class="dish-table-cell column-header">菜品描述</th>
+        <th class="dish-table-cell column-header">操作</th>
+      </tr>
+      {% for dish in dishes %}
+      <tr class="dish-table-row">
+        <td class="dish-table-cell">{{ dish.dish_id }}</td>
+        <td class="dish-table-cell">{{ dish.dish_name }}</td>
+        <td class="dish-table-cell">{{ dish.dish_price }}</td>
+        <td class="dish-table-cell">{{ dish.dish_description }}</td>
+        <td class="dish-table-cell">
+          <a href="{% url 'testapp:todishedit' dish.dish_id|stringformat:'s' %}">编辑</a>
+          <a href="#" onclick="confirmDelete('{{ dish.dish_id }}')">删除</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr class="dish-table-row">
+        <td class="dish-table-cell" colspan="5">暂无菜品</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h2>添加菜品</h2>
+    <form method="POST" action="/testapp/dishadd/">
+      {% csrf_token %}
+      <label for="dish_name">菜品名：</label>
+      <input type="text" id="dish_name" name="dish_name" required><br><br>
+      <label for="dish_price">菜品价格：</label>
+      <input type="text" id="dish_price" name="dish_price" required><br><br>
+      <label for="dish_description">菜品描述：</label>
+      <input type="text" id="dish_description" name="dish_description" required><br><br>
+      <button type="submit">添加</button>
+    </form>
+    <p>下班?<a href="/testapp/">返回首页</a></p>
+  </div>
+</body>
+</html>
